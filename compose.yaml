@@ -13,6 +13,7 @@ x-warehouse-env: &warehouse-env
   COHORT_SIZE: ${COHORT_SIZE:-1000}
   DATA_DIR: /opt/claims-dw/data
   CLAIMS_DW_HOST_LABEL: ${CLAIMS_DW_HOST_LABEL:-}
+  CLAIMS_DW_GIT_COMMIT: ${CLAIMS_DW_GIT_COMMIT:-}
 
 services:
   warehouse-db:

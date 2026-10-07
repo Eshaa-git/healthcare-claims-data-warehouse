@@ -4,17 +4,19 @@ Each task runs one `claims-dw` step in the pipeline's own virtualenv, so Airflow
 and the pipeline's (pandas, dbt) never share an environment. Only transient failures (exit code
 75: network or database unavailable) are retried; data, contract and check failures fail the
 task immediately. Publication happens only if every upstream task succeeded, so a failed run
-leaves the last published marts untouched.
+leaves the last published marts untouched. A run can be triggered with conf
+{"fail_after_chunks": 1, "fail_dataset": "drug_events"} to inject a load failure (recovery demo).
 """
 
 from __future__ import annotations
 
+import os
 import re
 import subprocess
 from datetime import datetime, timedelta
 
-from airflow.exceptions import AirflowException, AirflowFailException
 from airflow.sdk import dag, get_current_context, task
+from airflow.sdk.exceptions import AirflowException, AirflowFailException
 
 CLI = "/opt/claims-dw/venv/bin/claims-dw"
 EXIT_TRANSIENT = 75
@@ -26,9 +28,25 @@ def pipeline_run_id() -> str:
     return re.sub(r"[^A-Za-z0-9_.-]+", "-", get_current_context()["run_id"])
 
 
+# Optional DAG-run conf for recovery demos, e.g. {"fail_after_chunks": 1, "fail_dataset": "drug_events"}
+INJECTION_CONF = {
+    "fail_after_chunks": "CLAIMS_DW_FAIL_AFTER_CHUNKS",
+    "fail_dataset": "CLAIMS_DW_FAIL_DATASET",
+}
+
+
 def run_step(step: str) -> None:
+    env = dict(os.environ)
+    conf = get_current_context()["dag_run"].conf or {}
+    for key, var in INJECTION_CONF.items():
+        if key in conf:
+            env[var] = str(conf[key])
     result = subprocess.run(
-        [CLI, step, "--run-id", pipeline_run_id()], capture_output=True, text=True, check=False
+        [CLI, step, "--run-id", pipeline_run_id()],
+        capture_output=True,
+        text=True,
+        check=False,
+        env=env,
     )
     print(result.stdout)
     print(result.stderr)
@@ -61,7 +79,11 @@ def claims_pipeline():
 
     @task(trigger_rule="one_failed", retries=0)
     def mark_run_failed() -> None:
-        subprocess.run([CLI, "mark-failed", "--run-id", pipeline_run_id()], check=False)
+        """Record the failure in ops.pipeline_runs, then fail so the DAG run itself is failed."""
+        subprocess.run(
+            [CLI, "finish-run", "--status", "failed", "--run-id", pipeline_run_id()], check=False
+        )
+        raise AirflowFailException("an upstream pipeline step failed; nothing was published")
 
     for upstream, downstream in zip(tasks, tasks[1:], strict=False):
         upstream >> downstream

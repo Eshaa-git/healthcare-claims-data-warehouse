@@ -12,6 +12,7 @@ import logging
 import os
 import sys
 from collections.abc import Callable
+from pathlib import Path
 
 from . import acquire, cohort, ddl, fixtures, ingest, publish, reconcile, report, runs
 from .config import ConfigError, Settings, load_dotenv_if_present, load_settings
@@ -109,7 +110,8 @@ def cmd_publish(settings: Settings, args) -> None:
 
 
 def cmd_report(settings: Settings, args) -> None:
-    path = report.write_report(settings, args.run_id)
+    kwargs = {"out_dir": Path(args.out_dir)} if args.out_dir else {}
+    path = report.write_report(settings, args.run_id, **kwargs)
     print(f"wrote {path}")
 
 
@@ -133,8 +135,10 @@ def cmd_pipeline(settings: Settings, args) -> None:
         raise
 
 
-def cmd_mark_failed(settings: Settings, args) -> None:
-    runs.finish_run(settings, args.run_id, "failed", role="loader")
+def cmd_finish_run(settings: Settings, args) -> None:
+    if not args.run_id or args.status not in {"succeeded", "failed"}:
+        raise ConfigError("finish-run needs --run-id and --status succeeded|failed")
+    runs.finish_run(settings, args.run_id, args.status, role="loader")
 
 
 def cmd_generate_ddl(settings: Settings | None, args) -> None:
@@ -163,7 +167,7 @@ COMMANDS: dict[str, Callable] = {
     "publish": cmd_publish,
     "report": cmd_report,
     "pipeline": cmd_pipeline,
-    "mark-failed": cmd_mark_failed,
+    "finish-run": cmd_finish_run,
     "generate-ddl": cmd_generate_ddl,
     "fixture-batch": cmd_fixture_batch,
 }
@@ -174,6 +178,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("command", choices=sorted(COMMANDS))
     parser.add_argument("--run-id", help="run identifier shared by all steps of one pipeline run")
     parser.add_argument("--kind", choices=["incremental", "bad"], help="fixture-batch kind")
+    parser.add_argument("--status", help="finish-run status: succeeded or failed")
+    parser.add_argument("--out-dir", help="report output directory (default: reports/)")
     args = parser.parse_args(argv)
     logging.basicConfig(
         level=os.environ.get("LOG_LEVEL", "INFO"),

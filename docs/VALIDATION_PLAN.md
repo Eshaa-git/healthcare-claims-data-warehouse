@@ -1,37 +1,42 @@
-# Validation plan
+# Validation
 
-## Required tests
+Each requirement maps to an automated check. Results from the recorded run are in
+[RESULTS.md](RESULTS.md) and [`reports/`](../reports).
 
-- [ ] No duplicate fact keys; annual beneficiary key is unique.
-- [ ] Every accepted fact references an eligible beneficiary-year under the documented join rule.
-- [ ] Source rows = accepted rows + rejected rows; duplicate classification is explicit.
-- [ ] Money reconciliation uses decimal arithmetic, per source/year, with documented null handling and tolerance.
-- [ ] No negative length of stay; interpret financial adjustments from documentation rather than rejecting all negative amounts.
-- [ ] Duplicate rerun changes neither row counts nor payment totals.
+## Required checks
+
+| Requirement | Where it is enforced |
+|---|---|
+| No duplicate fact keys; beneficiary-year key unique | dbt `unique`/`not_null` tests on every fact and dimension key; stage primary keys; `duplicate_key_*` quarantine |
+| Every accepted fact references a beneficiary-year under the documented join rule | dbt `relationships` tests (fact → `dim_beneficiary_year`); loader quarantines `no_beneficiary_year` |
+| Source rows = accepted + rejected; duplicates classified explicitly | Loader refuses to commit a file that does not balance; reconciliation checks registry, raw, stage and quarantine counts per file |
+| Money reconciles with decimal arithmetic per source and year | `claims_dw.reconcile`: source sum = stage + quarantine per file; stage = fact per year; exact `numeric`, tolerance 0.00 |
+| No negative length of stay; negative amounts read from documentation | Loader quarantines `negative_length_of_stay`; dbt `non_negative` test; negative `CLM_PMT_AMT` kept (codebook IP-7, OP-7) |
+| A duplicate rerun changes neither counts nor totals | `test_02_rerun_is_idempotent`; second CMS run compared with `marts_previous` in `reports/metrics.json` |
 
 ## Test layers
 
-Unit tests validate transformations and edge cases using small fixtures. Integration tests exercise
-real local services, migrations and API/broker/database boundaries. End-to-end tests execute the
-seeded pipeline, verify output against fixture truth and rerun it. Failure tests interrupt a defined
-commit boundary and prove recovery. Assertions must test behavior, not merely echo implementation.
+| Layer | Files | Needs |
+|---|---|---|
+| Unit | `tests/unit/` (validation rules, DDL matches config, fixture determinism, cohort selection, checksum handling) | Nothing |
+| Integration and end-to-end | `tests/integration/test_pipeline_e2e.py`: fixture run equals fixture truth, idempotent rerun, incremental batch, quarantine reason per bad row, dashboard role limited to `marts` | PostgreSQL (`make up`); uses a separate `claims_test` database |
+| Failure and recovery | `tests/integration/test_recovery.py`: injected failure mid-file rolls back and retries; SIGKILL of a real loader process mid-transaction leaves zero rows; tampered build fails reconciliation and publish is refused | PostgreSQL |
+| dbt | 48 data tests (`dbt/models/**/_*.yml`, `dbt/tests/`) | Warehouse |
+| Reconciliation | 38 checks per CMS run, stored in `ops.reconciliation_results` | Warehouse |
 
-## Required evidence
+The deterministic fixture (`claims_dw.fixtures`) writes CMS-format archives and a
+`fixture_truth.json` with the expected counts and amounts, computed while the rows are
+generated. End-to-end tests compare the warehouse to that truth, not to the code under test.
 
-- Rows by input file and warehouse fact
-- Accepted, quarantined and duplicate counts
-- Source-to-warehouse payment reconciliation
-- End-to-end and per-stage runtime
-- Second-run idempotency result
-- Dashboard denominators and excluded records
+## CI
 
-Write `reports/metrics.json` with run ID, source/cohort/split hashes, git commit, versions, host specs,
-timestamps, counters, measured timings, failed checks and limitations. Use a monotonic timer for
-elapsed processing duration. Save logs without credentials. Missing evidence remains "not measured".
+`.github/workflows/ci.yml` runs on every push and pull request:
 
-## CI design — implement during build
+1. Ruff lint and format check.
+2. Unit tests.
+3. Integration and recovery tests against a `postgres:17.11-alpine` service container.
+4. The full fixture pipeline through the CLI, with the run summary added to the job summary.
+5. A Docker image build, a check that `requirements.lock.txt` matches `uv.lock`, and a DAG import
+   and task-chain check inside the image.
 
-Pull-request CI installs locked dependencies, lints, tests fixtures, starts required service containers,
-applies migrations and runs a small end-to-end test. Keep full public-dataset downloads and paid LLM
-calls out of routine CI. Provide explicit manual jobs for larger runs. Do not add passing badges
-before the associated workflow exists and passes.
+Full CMS downloads are not part of CI.

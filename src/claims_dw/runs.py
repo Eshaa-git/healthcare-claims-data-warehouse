@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import time
 import uuid
@@ -20,6 +21,9 @@ def new_run_id() -> str:
 
 
 def git_commit() -> str | None:
+    """Commit of the running code: CLAIMS_DW_GIT_COMMIT (set by `make up`) or `git rev-parse`."""
+    if os.environ.get("CLAIMS_DW_GIT_COMMIT"):
+        return os.environ["CLAIMS_DW_GIT_COMMIT"]
     try:
         out = subprocess.run(
             ["git", "rev-parse", "HEAD"],

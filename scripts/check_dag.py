@@ -7,7 +7,7 @@ except ImportError:  # older Airflow layout
 
 EXPECTED = ["acquire", "cohort", "stage", "dbt_run", "dbt_test", "reconcile", "publish"]
 
-bag = DagBag(dag_folder="/opt/airflow/dags", include_examples=False)
+bag = DagBag(dag_folder="/opt/airflow/dags")
 assert not bag.import_errors, bag.import_errors
 dag = bag.dags["claims_pipeline"]
 for upstream, downstream in zip(EXPECTED, EXPECTED[1:], strict=False):

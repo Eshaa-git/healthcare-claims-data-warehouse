@@ -5,6 +5,8 @@ SHELL := /bin/bash
 export
 
 COMPOSE := docker compose
+# Recorded in run metadata; "-dirty" marks uncommitted changes.
+export CLAIMS_DW_GIT_COMMIT := $(shell git describe --always --dirty --abbrev=40 2>/dev/null)
 CLI := $(COMPOSE) exec -T airflow /opt/claims-dw/venv/bin/claims-dw
 HOST_DB := WAREHOUSE_HOST=127.0.0.1 WAREHOUSE_PORT=$(or $(WAREHOUSE_HOST_PORT),55432)
 
@@ -20,7 +22,7 @@ setup: ## Check runtime and .env, install locked dependencies, validate config
 	@scripts/check_env.sh
 	uv sync --frozen
 	uv export --frozen --no-dev --no-emit-project --format requirements-txt -q -o requirements.lock.txt
-	uv run claims-dw check-config
+	$(HOST_DB) uv run claims-dw check-config
 
 lock: ## Re-resolve dependencies and refresh requirements.lock.txt
 	uv lock
@@ -31,8 +33,10 @@ up: ## Build the image, start services (waits for health checks), apply migratio
 	$(CLI) migrate
 
 seed: ## Download CMS archives (checksums verified) and build the cohort extracts
-	$(CLI) acquire --run-id seed-$$(date -u +%Y%m%dT%H%M%SZ)
-	$(CLI) cohort --run-id seed-$$(date -u +%Y%m%dT%H%M%SZ)
+	@run=seed-$$(date -u +%Y%m%dT%H%M%SZ); \
+	  $(CLI) acquire --run-id $$run && $(CLI) cohort --run-id $$run \
+	  && $(CLI) finish-run --run-id $$run --status succeeded \
+	  || { $(CLI) finish-run --run-id $$run --status failed; exit 1; }
 
 pipeline: ## Trigger the Airflow DAG and wait; exits nonzero if the run fails
 	scripts/run_dag.sh
