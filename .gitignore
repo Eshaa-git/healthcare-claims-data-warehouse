@@ -1,0 +1,20 @@
+# Local credentials
+.env
+.env.*
+!.env.example
+# Python / tooling
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+# Data: raw CMS archives, cohort extracts and manifests are reproducible and stay out of git
+data/
+logs/
+volumes/
+*.db
+*.sqlite
+# dbt build output
+dbt/target/
+dbt/logs/
+.DS_Store

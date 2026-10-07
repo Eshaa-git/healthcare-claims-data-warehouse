@@ -1,0 +1,50 @@
+# CMS 2008–2010 Data Entrepreneurs' Synthetic Public Use File (DE-SynPUF), Sample 1.
+# Landing page: https://www.cms.gov/data-research/statistics-trends-and-reports/medicare-claims-synthetic-public-use-files/cms-2008-2010-data-entrepreneurs-synthetic-public-use-file-de-synpuf/de10-sample-1
+# sha256 and size_bytes were recorded from downloads on 2026-10-07; acquisition fails if they change.
+dataset_version: cms-de-synpuf-2008-2010-sample-1
+files:
+  - dataset: beneficiary_summary
+    year: 2008
+    url: https://www.cms.gov/research-statistics-data-and-systems/downloadable-public-use-files/synpufs/downloads/de1_0_2008_beneficiary_summary_file_sample_1.zip
+    archive: de1_0_2008_beneficiary_summary_file_sample_1.zip
+    member: DE1_0_2008_Beneficiary_Summary_File_Sample_1.csv
+    sha256: 2b0c9cbfb07a6eb46d5f96472c0891275a390b686c3fa34daae8d3e53d70b18b
+    size_bytes: 3119160
+  - dataset: beneficiary_summary
+    year: 2009
+    url: https://www.cms.gov/research-statistics-data-and-systems/downloadable-public-use-files/synpufs/downloads/de1_0_2009_beneficiary_summary_file_sample_1.zip
+    archive: de1_0_2009_beneficiary_summary_file_sample_1.zip
+    member: DE1_0_2009_Beneficiary_Summary_File_Sample_1.csv
+    sha256: dff1853368d8279cd60efabd067ad518decd5f200475134e0b4d0408880bb379
+    size_bytes: 3177446
+  - dataset: beneficiary_summary
+    year: 2010
+    # CMS publishes this Sample 1 file under a URL ending in "sample_20"; the archive member is Sample_1.
+    url: https://www.cms.gov/research-statistics-data-and-systems/statistics-trends-and-reports/synpufs/downloads/de1_0_2010_beneficiary_summary_file_sample_20.zip
+    archive: de1_0_2010_beneficiary_summary_file_sample_20.zip
+    member: DE1_0_2010_Beneficiary_Summary_File_Sample_1.csv
+    sha256: b28b8ac7ecc2ba2fb3138dbba74dd41a183a34d0322c0492f7a87a8e7dc1fdff
+    size_bytes: 2960588
+  - dataset: inpatient_claims
+    url: https://www.cms.gov/research-statistics-data-and-systems/downloadable-public-use-files/synpufs/downloads/de1_0_2008_to_2010_inpatient_claims_sample_1.zip
+    archive: de1_0_2008_to_2010_inpatient_claims_sample_1.zip
+    member: DE1_0_2008_to_2010_Inpatient_Claims_Sample_1.csv
+    sha256: ac25124184d22863aff538607097d2d0c880d19f7d58f882f9d31129c492d893
+    size_bytes: 4162147
+  - dataset: outpatient_claims
+    url: https://www.cms.gov/research-statistics-data-and-systems/downloadable-public-use-files/synpufs/downloads/de1_0_2008_to_2010_outpatient_claims_sample_1.zip
+    archive: de1_0_2008_to_2010_outpatient_claims_sample_1.zip
+    member: DE1_0_2008_to_2010_Outpatient_Claims_Sample_1.csv
+    sha256: 7c94a94c8c676511d0bbea2dae3e6511980bdb8e44003285a0619a7ef38f9495
+    size_bytes: 34456300
+  - dataset: drug_events
+    url: https://downloads.cms.gov/files/DE1_0_2008_to_2010_Prescription_Drug_Events_Sample_1.zip
+    archive: DE1_0_2008_to_2010_Prescription_Drug_Events_Sample_1.zip
+    member: DE1_0_2008_to_2010_Prescription_Drug_Events_Sample_1.csv
+    sha256: 69f704c8d462996a24ff2b6946c420128ac6adf862375e0d9f35eddc835ff0ac
+    size_bytes: 104703956
+documentation:
+  - name: DE-SynPUF Data Users Guide
+    url: https://www.cms.gov/research-statistics-data-and-systems/downloadable-public-use-files/synpufs/downloads/synpuf_dug.pdf
+  - name: DE-SynPUF Codebook
+    url: https://www.cms.gov/files/document/de-10-codebook.pdf-0

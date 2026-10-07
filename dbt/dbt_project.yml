@@ -1,0 +1,24 @@
+name: claims_warehouse
+version: "0.1.0"
+config-version: 2
+profile: claims_warehouse
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+target-path: target
+clean-targets: [target]
+
+flags:
+  send_anonymous_usage_stats: false
+
+models:
+  claims_warehouse:
+    staging:
+      +schema: staging
+      +materialized: view
+    intermediate:
+      +materialized: ephemeral
+    marts:
+      +schema: marts
+      +materialized: table

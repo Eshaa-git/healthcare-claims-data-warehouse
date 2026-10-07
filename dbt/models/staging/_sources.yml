@@ -1,0 +1,17 @@
+version: 2
+
+sources:
+  - name: stage
+    description: Typed, validated rows written by `claims-dw stage` (one row per accepted source row).
+    schema: stage
+    tables:
+      - name: beneficiary_year
+      - name: inpatient_claim_segment
+      - name: outpatient_claim_segment
+      - name: drug_event
+  - name: ops
+    description: Ingestion registry and quarantine written by the loader.
+    schema: ops
+    tables:
+      - name: ingestion_files
+      - name: quarantine_rows

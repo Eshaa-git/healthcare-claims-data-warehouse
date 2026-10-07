@@ -1,0 +1,105 @@
+# Source-to-stage field mapping. The staging loader is driven by this file.
+#
+# type            transformation applied to the raw text value
+#   text          strip whitespace; empty -> NULL
+#   date          strict YYYYMMDD -> DATE; anything else is quarantined (invalid_date)
+#   money         ^-?digits(.dd)?$ -> NUMERIC(14,2), exact decimal; else quarantined (invalid_amount)
+#   integer       ^-?digits$ -> INTEGER; else quarantined (invalid_integer)
+#   decimal       ^-?digits(.digits)?$ -> NUMERIC(14,3); else quarantined (invalid_decimal)
+#   flag_1yes_2no '1' -> true, '2' -> false; else quarantined (invalid_code)
+#   esrd          'Y' -> true, '0' -> false; else quarantined (invalid_code)
+#   sex           '1' (male) / '2' (female) kept as text; else quarantined (invalid_code)
+# nulls: "reject" quarantines the row when the value is empty (missing_required);
+#        "reject_segment_1" applies that rule only to SEGMENT = 1 claim rows;
+#        "allow" stores NULL.
+# key: part of the stage table's natural key.
+# doc: section ID in the DE-SynPUF Codebook (de-10-codebook.pdf), verified against the PDF text.
+mapping_version: 1
+datasets:
+  beneficiary_summary:
+    stage_table: stage.beneficiary_year
+    year_from_source_config: true      # the CSV has no year column; the file's year comes from config/sources.yaml
+    fields:
+      - {source: DESYNPUF_ID, target: beneficiary_id, type: text, nulls: reject, key: true, doc: "Codebook BEN-1"}
+      - {source: BENE_BIRTH_DT, target: birth_date, type: date, nulls: reject, doc: "Codebook BEN-2"}
+      - {source: BENE_DEATH_DT, target: death_date, type: date, nulls: allow, doc: "Codebook BEN-3"}
+      - {source: BENE_SEX_IDENT_CD, target: sex_code, type: sex, nulls: reject, doc: "Codebook BEN-4; 1=male, 2=female"}
+      - {source: BENE_RACE_CD, target: race_code, type: text, nulls: allow, doc: "Codebook BEN-5"}
+      - {source: BENE_ESRD_IND, target: has_esrd, type: esrd, nulls: allow, doc: "Codebook BEN-6; Y=yes, 0=no"}
+      - {source: SP_STATE_CODE, target: state_code, type: text, nulls: allow, doc: "Codebook BEN-7 (SSA state code)"}
+      - {source: BENE_COUNTY_CD, target: county_code, type: text, nulls: allow, doc: "Codebook BEN-8"}
+      - {source: BENE_HI_CVRAGE_TOT_MONS, target: part_a_coverage_months, type: integer, nulls: allow, unit: months, doc: "Codebook BEN-9"}
+      - {source: BENE_SMI_CVRAGE_TOT_MONS, target: part_b_coverage_months, type: integer, nulls: allow, unit: months, doc: "Codebook BEN-10"}
+      - {source: BENE_HMO_CVRAGE_TOT_MONS, target: hmo_coverage_months, type: integer, nulls: allow, unit: months, doc: "Codebook BEN-11"}
+      - {source: PLAN_CVRG_MOS_NUM, target: part_d_coverage_months, type: integer, nulls: allow, unit: months, doc: "Codebook BEN-12"}
+      - {source: SP_ALZHDMTA, target: cc_alzheimers, type: flag_1yes_2no, nulls: allow, doc: "Codebook BEN-13"}
+      - {source: SP_CHF, target: cc_heart_failure, type: flag_1yes_2no, nulls: allow, doc: "Codebook BEN-14"}
+      - {source: SP_CHRNKIDN, target: cc_chronic_kidney, type: flag_1yes_2no, nulls: allow, doc: "Codebook BEN-15"}
+      - {source: SP_CNCR, target: cc_cancer, type: flag_1yes_2no, nulls: allow, doc: "Codebook BEN-16"}
+      - {source: SP_COPD, target: cc_copd, type: flag_1yes_2no, nulls: allow, doc: "Codebook BEN-17"}
+      - {source: SP_DEPRESSN, target: cc_depression, type: flag_1yes_2no, nulls: allow, doc: "Codebook BEN-18"}
+      - {source: SP_DIABETES, target: cc_diabetes, type: flag_1yes_2no, nulls: allow, doc: "Codebook BEN-19"}
+      - {source: SP_ISCHMCHT, target: cc_ischemic_heart, type: flag_1yes_2no, nulls: allow, doc: "Codebook BEN-20"}
+      - {source: SP_OSTEOPRS, target: cc_osteoporosis, type: flag_1yes_2no, nulls: allow, doc: "Codebook BEN-21"}
+      - {source: SP_RA_OA, target: cc_ra_oa, type: flag_1yes_2no, nulls: allow, doc: "Codebook BEN-22"}
+      - {source: SP_STRKETIA, target: cc_stroke_tia, type: flag_1yes_2no, nulls: allow, doc: "Codebook BEN-23"}
+      - {source: MEDREIMB_IP, target: ip_medicare_reimbursement_amt, type: money, nulls: allow, unit: USD, doc: "Codebook BEN-24"}
+      - {source: BENRES_IP, target: ip_beneficiary_responsibility_amt, type: money, nulls: allow, unit: USD, doc: "Codebook BEN-25"}
+      - {source: PPPYMT_IP, target: ip_primary_payer_amt, type: money, nulls: allow, unit: USD, doc: "Codebook BEN-26"}
+      - {source: MEDREIMB_OP, target: op_medicare_reimbursement_amt, type: money, nulls: allow, unit: USD, doc: "Codebook BEN-27"}
+      - {source: BENRES_OP, target: op_beneficiary_responsibility_amt, type: money, nulls: allow, unit: USD, doc: "Codebook BEN-28"}
+      - {source: PPPYMT_OP, target: op_primary_payer_amt, type: money, nulls: allow, unit: USD, doc: "Codebook BEN-29"}
+      - {source: MEDREIMB_CAR, target: carrier_medicare_reimbursement_amt, type: money, nulls: allow, unit: USD, doc: "Codebook BEN-30"}
+      - {source: BENRES_CAR, target: carrier_beneficiary_responsibility_amt, type: money, nulls: allow, unit: USD, doc: "Codebook BEN-31"}
+      - {source: PPPYMT_CAR, target: carrier_primary_payer_amt, type: money, nulls: allow, unit: USD, doc: "Codebook BEN-32"}
+
+  inpatient_claims:
+    stage_table: stage.inpatient_claim_segment
+    fields:
+      - {source: DESYNPUF_ID, target: beneficiary_id, type: text, nulls: reject, doc: "Codebook IP-1"}
+      - {source: CLM_ID, target: claim_id, type: text, nulls: reject, key: true, doc: "Codebook IP-2"}
+      - {source: SEGMENT, target: segment, type: integer, nulls: reject, key: true, doc: "Codebook IP-3 claim line segment"}
+      - {source: CLM_FROM_DT, target: claim_from_date, type: date, nulls: reject_segment_1, doc: "Codebook IP-4"}
+      - {source: CLM_THRU_DT, target: claim_thru_date, type: date, nulls: reject_segment_1, doc: "Codebook IP-5"}
+      - {source: PRVDR_NUM, target: provider_id, type: text, nulls: allow, doc: "Codebook IP-6 (synthetic, random)"}
+      - {source: CLM_PMT_AMT, target: claim_payment_amt, type: money, nulls: reject, unit: USD, doc: "Codebook IP-7: Medicare claim payment; may be negative"}
+      - {source: NCH_PRMRY_PYR_CLM_PD_AMT, target: primary_payer_paid_amt, type: money, nulls: allow, unit: USD, doc: "Codebook IP-8"}
+      - {source: CLM_ADMSN_DT, target: admission_date, type: date, nulls: reject_segment_1, doc: "Codebook IP-12"}
+      - {source: ADMTNG_ICD9_DGNS_CD, target: admitting_dx_code, type: text, nulls: allow, code_system: ICD-9-CM, doc: "Codebook IP-13"}
+      - {source: CLM_PASS_THRU_PER_DIEM_AMT, target: pass_thru_per_diem_amt, type: money, nulls: allow, unit: USD, doc: "Codebook IP-14"}
+      - {source: NCH_BENE_IP_DDCTBL_AMT, target: ip_deductible_amt, type: money, nulls: allow, unit: USD, doc: "Codebook IP-15"}
+      - {source: NCH_BENE_PTA_COINSRNC_LBLTY_AM, target: part_a_coinsurance_amt, type: money, nulls: allow, unit: USD, doc: "Codebook IP-16"}
+      - {source: NCH_BENE_BLOOD_DDCTBL_LBLTY_AM, target: blood_deductible_amt, type: money, nulls: allow, unit: USD, doc: "Codebook IP-17"}
+      - {source: CLM_UTLZTN_DAY_CNT, target: utilization_day_count, type: integer, nulls: allow, unit: days, doc: "Codebook IP-18"}
+      - {source: NCH_BENE_DSCHRG_DT, target: discharge_date, type: date, nulls: reject_segment_1, doc: "Codebook IP-19"}
+      - {source: CLM_DRG_CD, target: drg_code, type: text, nulls: allow, code_system: MS-DRG, doc: "Codebook IP-20"}
+      - {source: ICD9_DGNS_CD_1, target: principal_dx_code, type: text, nulls: allow, code_system: ICD-9-CM, doc: "Codebook IP-21-30 (diagnosis code 1)"}
+
+  outpatient_claims:
+    stage_table: stage.outpatient_claim_segment
+    fields:
+      - {source: DESYNPUF_ID, target: beneficiary_id, type: text, nulls: reject, doc: "Codebook OP-1"}
+      - {source: CLM_ID, target: claim_id, type: text, nulls: reject, key: true, doc: "Codebook OP-2"}
+      - {source: SEGMENT, target: segment, type: integer, nulls: reject, key: true, doc: "Codebook OP-3 claim line segment"}
+      - {source: CLM_FROM_DT, target: claim_from_date, type: date, nulls: reject_segment_1, doc: "Codebook OP-4"}
+      - {source: CLM_THRU_DT, target: claim_thru_date, type: date, nulls: reject_segment_1, doc: "Codebook OP-5"}
+      - {source: PRVDR_NUM, target: provider_id, type: text, nulls: allow, doc: "Codebook OP-6 (synthetic, random)"}
+      - {source: CLM_PMT_AMT, target: claim_payment_amt, type: money, nulls: reject, unit: USD, doc: "Codebook OP-7: Medicare claim payment; may be negative"}
+      - {source: NCH_PRMRY_PYR_CLM_PD_AMT, target: primary_payer_paid_amt, type: money, nulls: allow, unit: USD, doc: "Codebook OP-8"}
+      - {source: NCH_BENE_BLOOD_DDCTBL_LBLTY_AM, target: blood_deductible_amt, type: money, nulls: allow, unit: USD, doc: "Codebook OP-12"}
+      - {source: ICD9_DGNS_CD_1, target: principal_dx_code, type: text, nulls: allow, code_system: ICD-9-CM, doc: "Codebook OP-13-22 (diagnosis code 1)"}
+      - {source: NCH_BENE_PTB_DDCTBL_AMT, target: part_b_deductible_amt, type: money, nulls: allow, unit: USD, doc: "Codebook OP-29"}
+      - {source: NCH_BENE_PTB_COINSRNC_AMT, target: part_b_coinsurance_amt, type: money, nulls: allow, unit: USD, doc: "Codebook OP-30"}
+      - {source: ADMTNG_ICD9_DGNS_CD, target: admitting_dx_code, type: text, nulls: allow, code_system: ICD-9-CM, doc: "Codebook OP-31"}
+
+  drug_events:
+    stage_table: stage.drug_event
+    fields:
+      - {source: DESYNPUF_ID, target: beneficiary_id, type: text, nulls: reject, doc: "Codebook PDE-1"}
+      - {source: PDE_ID, target: pde_id, type: text, nulls: reject, key: true, doc: "Codebook PDE-2"}
+      - {source: SRVC_DT, target: service_date, type: date, nulls: reject, doc: "Codebook PDE-3"}
+      - {source: PROD_SRVC_ID, target: product_service_id, type: text, nulls: allow, code_system: NDC, doc: "Codebook PDE-4 (keep leading zeros)"}
+      - {source: QTY_DSPNSD_NUM, target: quantity_dispensed, type: decimal, nulls: allow, doc: "Codebook PDE-5"}
+      - {source: DAYS_SUPLY_NUM, target: days_supply, type: integer, nulls: allow, unit: days, doc: "Codebook PDE-6"}
+      - {source: PTNT_PAY_AMT, target: patient_pay_amt, type: money, nulls: reject, unit: USD, doc: "Codebook PDE-7"}
+      - {source: TOT_RX_CST_AMT, target: gross_drug_cost_amt, type: money, nulls: reject, unit: USD, doc: "Codebook PDE-8: Gross Drug Cost"}

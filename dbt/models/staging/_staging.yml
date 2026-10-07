@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: stg_beneficiary_year
+    columns:
+      - name: beneficiary_year_key
+        tests: [unique, not_null]
+  - name: stg_inpatient_claim_segment
+    tests:
+      - unique_combination:
+          arguments:
+            columns: [claim_id, segment]
+  - name: stg_outpatient_claim_segment
+    tests:
+      - unique_combination:
+          arguments:
+            columns: [claim_id, segment]
+  - name: stg_drug_event
+    columns:
+      - name: pde_id
+        tests: [unique, not_null]

@@ -1,0 +1,111 @@
+version: 2
+
+models:
+  - name: dim_beneficiary_year
+    description: One beneficiary per source year.
+    columns:
+      - name: beneficiary_year_key
+        tests: [unique, not_null]
+      - name: beneficiary_id
+        tests: [not_null]
+      - name: year
+        tests:
+          - accepted_values:
+              arguments:
+                values: [2008, 2009, 2010]
+
+  - name: dim_date
+    columns:
+      - name: date_key
+        tests: [unique, not_null]
+
+  - name: fact_inpatient_claim
+    description: One inpatient claim; amounts summed across claim segments.
+    columns:
+      - name: inpatient_claim_key
+        tests: [unique, not_null]
+      - name: claim_id
+        tests: [unique, not_null]
+      - name: beneficiary_year_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_beneficiary_year')
+                field: beneficiary_year_key
+      - name: claim_thru_date_key
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+      - name: length_of_stay_days
+        tests: [not_null, non_negative]
+      - name: medicare_claim_payment_amt
+        tests: [not_null]
+
+  - name: fact_outpatient_claim
+    description: One outpatient claim; amounts summed across claim segments.
+    columns:
+      - name: outpatient_claim_key
+        tests: [unique, not_null]
+      - name: claim_id
+        tests: [unique, not_null]
+      - name: beneficiary_year_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_beneficiary_year')
+                field: beneficiary_year_key
+      - name: claim_thru_date_key
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+      - name: medicare_claim_payment_amt
+        tests: [not_null]
+
+  - name: fact_drug_event
+    description: One Part D prescription drug event.
+    columns:
+      - name: drug_event_key
+        tests: [unique, not_null]
+      - name: pde_id
+        tests: [unique, not_null]
+      - name: beneficiary_year_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_beneficiary_year')
+                field: beneficiary_year_key
+      - name: service_date_key
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+      - name: gross_drug_cost_amt
+        tests: [not_null, non_negative]
+      - name: patient_pay_amt
+        tests: [not_null, non_negative]
+
+  - name: mart_monthly_claim_payments
+    tests:
+      - unique_combination:
+          arguments:
+            columns: [month_start, claim_type]
+
+  - name: mart_monthly_drug_events
+    columns:
+      - name: month_start
+        tests: [unique, not_null]
+
+  - name: mart_inpatient_utilization_yearly
+    columns:
+      - name: year
+        tests: [unique, not_null]
+      - name: beneficiary_years
+        tests: [not_null]

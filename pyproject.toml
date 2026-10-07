@@ -1,0 +1,49 @@
+[project]
+name = "claims-dw"
+version = "0.1.0"
+description = "Batch pipeline and dimensional warehouse for CMS DE-SynPUF synthetic Medicare claims"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "pandas>=3.0,<3.1",
+    "sqlalchemy>=2.1,<2.2",
+    "psycopg[binary]>=3.3,<3.4",
+    "pyyaml>=6.0,<7",
+    "dbt-core>=1.12,<1.13",
+    "dbt-postgres>=1.11,<1.12",
+    "streamlit>=1.65,<1.66",
+    "altair>=6.3,<7",
+]
+
+[project.scripts]
+claims-dw = "claims_dw.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1,<10",
+    "ruff>=0.16,<0.17",
+]
+
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/claims_dw"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "integration: needs a running PostgreSQL warehouse (make up)",
+    "e2e: runs the full fixture pipeline including dbt",
+]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+# Line length is enforced by `ruff format`; long SQL string literals are left intact.
+ignore = ["E501"]
