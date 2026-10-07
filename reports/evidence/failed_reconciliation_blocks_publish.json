@@ -1,0 +1,5 @@
+{
+  "tampering": "+0.01 on one inpatient fact in the build schema",
+  "reconciliation_error": "1 of 40 checks failed: money: stage = fact_inpatient_claim medicare payment [2008] expected 45200.00 got 45200.01",
+  "published_run_still": "rec-good"
+}

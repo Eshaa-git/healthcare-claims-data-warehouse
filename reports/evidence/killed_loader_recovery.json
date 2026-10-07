@@ -1,0 +1,15 @@
+{
+  "signal": "SIGKILL after 2 of 3 chunks",
+  "registry_status_after_kill": "loading",
+  "committed_rows_after_kill": {
+    "raw": 0,
+    "stage": 0
+  },
+  "rerun": [
+    [
+      "inpatient_claims__batch_002.csv",
+      "loaded",
+      3
+    ]
+  ]
+}

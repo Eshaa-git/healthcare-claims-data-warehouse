@@ -45,7 +45,15 @@ class Cdp:
                 return msg.get("result", {})
 
 
-async def capture(port: int, url: str, out: str, wait_text: str | None, width: int, timeout: float):
+async def capture(
+    port: int,
+    url: str,
+    out: str,
+    wait_text: str | None,
+    width: int,
+    timeout: float,
+    fixed_height: int | None = None,
+):
     targets = json.load(urllib.request.urlopen(f"http://127.0.0.1:{port}/json"))
     page = next(t for t in targets if t["type"] == "page")
     async with websockets.connect(page["webSocketDebuggerUrl"], max_size=None) as ws:
@@ -76,20 +84,24 @@ async def capture(port: int, url: str, out: str, wait_text: str | None, width: i
             await asyncio.sleep(1)
         await asyncio.sleep(3)  # let charts finish drawing
         # Streamlit scrolls inside its own container; size the viewport to the full content.
+        # Pages with their own scroll panes (dbt docs) need a fixed height instead.
         height = (
-            await cdp.call(
-                "Runtime.evaluate",
-                expression=(
-                    "Math.max(document.body.scrollHeight, ...Array.from(document.querySelectorAll("
-                    '\'[data-testid="stMain"], section.main, [data-testid="stAppViewContainer"]\'))'
-                    ".map(e => e.scrollHeight))"
-                ),
-            )
-        )["result"]["value"]
+            fixed_height
+            or (
+                await cdp.call(
+                    "Runtime.evaluate",
+                    expression=(
+                        "Math.max(document.body.scrollHeight, ...Array.from(document.querySelectorAll("
+                        '\'[data-testid="stMain"], section.main, [data-testid="stAppViewContainer"]\'))'
+                        ".map(e => e.scrollHeight))"
+                    ),
+                )
+            )["result"]["value"]
+        )
         await cdp.call(
             "Emulation.setDeviceMetricsOverride",
             width=width,
-            height=int(height) + 40,
+            height=int(height) + (0 if fixed_height else 40),
             deviceScaleFactor=1,
             mobile=False,
         )
@@ -106,6 +118,7 @@ def main() -> None:
     p.add_argument("--wait-text")
     p.add_argument("--width", type=int, default=1400)
     p.add_argument("--timeout", type=float, default=60)
+    p.add_argument("--height", type=int, help="fixed viewport height instead of full content")
     args = p.parse_args()
     chrome = next(c for c in CHROME_CANDIDATES if c and os.path.exists(c))
     port = 9333
@@ -133,7 +146,11 @@ def main() -> None:
                     break
                 except OSError:
                     time.sleep(0.2)
-            asyncio.run(capture(port, args.url, args.out, args.wait_text, args.width, args.timeout))
+            asyncio.run(
+                capture(
+                    port, args.url, args.out, args.wait_text, args.width, args.timeout, args.height
+                )
+            )
         finally:
             proc.terminate()
             proc.wait(timeout=10)

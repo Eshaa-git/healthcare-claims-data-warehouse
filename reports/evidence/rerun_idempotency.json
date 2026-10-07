@@ -1,0 +1,29 @@
+{
+  "second_run_file_statuses": [
+    "skipped",
+    "skipped",
+    "skipped",
+    "skipped",
+    "skipped",
+    "skipped"
+  ],
+  "published_marts_unchanged": true,
+  "fact_counts_and_sums": {
+    "fact_inpatient_claim": [
+      10,
+      "45200.00"
+    ],
+    "fact_outpatient_claim": [
+      40,
+      "16476.50"
+    ],
+    "fact_drug_event": [
+      75,
+      "14995.55"
+    ],
+    "dim_beneficiary_year": [
+      87,
+      174781
+    ]
+  }
+}

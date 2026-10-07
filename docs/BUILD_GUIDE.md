@@ -1,3 +1,6 @@
+> **Original specification.** This is the build guide the project was implemented from. What was
+> actually built and measured is in [ARCHITECTURE.md](ARCHITECTURE.md) and [RESULTS.md](RESULTS.md).
+
 # End-to-end build guide
 
 ## Prerequisites and environment

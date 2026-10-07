@@ -1,0 +1,869 @@
+{
+  "run_id": "manual__20261007T221529Z",
+  "generated_at": "2026-10-07T22:16:28+00:00",
+  "git_commit": "61313ec0e7f56a8a82e2d3285897d6c15bae1fde",
+  "run": {
+    "run_id": "manual__20261007T221529Z",
+    "source": "cms",
+    "git_commit": "61313ec0e7f56a8a82e2d3285897d6c15bae1fde",
+    "started_at": "2026-10-07T22:15:34.326717+00:00",
+    "finished_at": "2026-10-07T22:16:11.393565+00:00",
+    "status": "succeeded"
+  },
+  "environment": {
+    "host": {
+      "os": "Linux-7.0.14-linuxkit-aarch64-with-glibc2.36",
+      "machine": "aarch64",
+      "cpu_count": 8,
+      "python": "3.12.14",
+      "inside_container": true,
+      "memory_gb": 3.8,
+      "docker_host": "Docker Desktop 4.94.0 (Engine 29.8.2) on Apple M1, 8 CPU, 8 GB RAM, macOS 14.5; Docker VM 4 GB"
+    },
+    "postgres_server_version": "17.11",
+    "packages": {
+      "claims-dw": "0.1.0",
+      "pandas": "3.0.6",
+      "sqlalchemy": "2.1.4",
+      "psycopg": "3.3.6",
+      "dbt-core": "1.12.5",
+      "dbt-postgres": "1.11.0",
+      "streamlit": "1.65.0"
+    },
+    "airflow_version": "3.3.2"
+  },
+  "source": {
+    "kind": "cms",
+    "manifest": {
+      "source": "cms",
+      "dataset_version": "cms-de-synpuf-2008-2010-sample-1",
+      "files": [
+        {
+          "dataset": "beneficiary_summary",
+          "year": 2008,
+          "url": "https://www.cms.gov/research-statistics-data-and-systems/downloadable-public-use-files/synpufs/downloads/de1_0_2008_beneficiary_summary_file_sample_1.zip",
+          "archive": "de1_0_2008_beneficiary_summary_file_sample_1.zip",
+          "member": "DE1_0_2008_Beneficiary_Summary_File_Sample_1.csv",
+          "sha256": "2b0c9cbfb07a6eb46d5f96472c0891275a390b686c3fa34daae8d3e53d70b18b",
+          "size_bytes": 3119160,
+          "retrieved_at": "2026-10-07T22:13:14+00:00",
+          "status": "present"
+        },
+        {
+          "dataset": "beneficiary_summary",
+          "year": 2009,
+          "url": "https://www.cms.gov/research-statistics-data-and-systems/downloadable-public-use-files/synpufs/downloads/de1_0_2009_beneficiary_summary_file_sample_1.zip",
+          "archive": "de1_0_2009_beneficiary_summary_file_sample_1.zip",
+          "member": "DE1_0_2009_Beneficiary_Summary_File_Sample_1.csv",
+          "sha256": "dff1853368d8279cd60efabd067ad518decd5f200475134e0b4d0408880bb379",
+          "size_bytes": 3177446,
+          "retrieved_at": "2026-10-07T22:13:14+00:00",
+          "status": "present"
+        },
+        {
+          "dataset": "beneficiary_summary",
+          "year": 2010,
+          "url": "https://www.cms.gov/research-statistics-data-and-systems/statistics-trends-and-reports/synpufs/downloads/de1_0_2010_beneficiary_summary_file_sample_20.zip",
+          "archive": "de1_0_2010_beneficiary_summary_file_sample_20.zip",
+          "member": "DE1_0_2010_Beneficiary_Summary_File_Sample_1.csv",
+          "sha256": "b28b8ac7ecc2ba2fb3138dbba74dd41a183a34d0322c0492f7a87a8e7dc1fdff",
+          "size_bytes": 2960588,
+          "retrieved_at": "2026-10-07T22:13:14+00:00",
+          "status": "present"
+        },
+        {
+          "dataset": "inpatient_claims",
+          "year": null,
+          "url": "https://www.cms.gov/research-statistics-data-and-systems/downloadable-public-use-files/synpufs/downloads/de1_0_2008_to_2010_inpatient_claims_sample_1.zip",
+          "archive": "de1_0_2008_to_2010_inpatient_claims_sample_1.zip",
+          "member": "DE1_0_2008_to_2010_Inpatient_Claims_Sample_1.csv",
+          "sha256": "ac25124184d22863aff538607097d2d0c880d19f7d58f882f9d31129c492d893",
+          "size_bytes": 4162147,
+          "retrieved_at": "2026-10-07T22:13:15+00:00",
+          "status": "present"
+        },
+        {
+          "dataset": "outpatient_claims",
+          "year": null,
+          "url": "https://www.cms.gov/research-statistics-data-and-systems/downloadable-public-use-files/synpufs/downloads/de1_0_2008_to_2010_outpatient_claims_sample_1.zip",
+          "archive": "de1_0_2008_to_2010_outpatient_claims_sample_1.zip",
+          "member": "DE1_0_2008_to_2010_Outpatient_Claims_Sample_1.csv",
+          "sha256": "7c94a94c8c676511d0bbea2dae3e6511980bdb8e44003285a0619a7ef38f9495",
+          "size_bytes": 34456300,
+          "retrieved_at": "2026-10-07T22:13:15+00:00",
+          "status": "present"
+        },
+        {
+          "dataset": "drug_events",
+          "year": null,
+          "url": "https://downloads.cms.gov/files/DE1_0_2008_to_2010_Prescription_Drug_Events_Sample_1.zip",
+          "archive": "DE1_0_2008_to_2010_Prescription_Drug_Events_Sample_1.zip",
+          "member": "DE1_0_2008_to_2010_Prescription_Drug_Events_Sample_1.csv",
+          "sha256": "69f704c8d462996a24ff2b6946c420128ac6adf862375e0d9f35eddc835ff0ac",
+          "size_bytes": 104703956,
+          "retrieved_at": "2026-10-07T22:13:19+00:00",
+          "status": "present"
+        }
+      ]
+    },
+    "cohort": {
+      "cohort_size_requested": 1000,
+      "cohort_size": 1000,
+      "cohort_sha256": "2084198827772e7d3373b39f1ec446490d56b363b6974da36a2ca9a179ab80bf",
+      "selection_rule": "first N DESYNPUF_ID values in ascending order across all beneficiary summary files",
+      "extracts": [
+        {
+          "extract": "de1_0_2008_beneficiary_summary_file_sample_1.csv",
+          "dataset": "beneficiary_summary",
+          "year": 2008,
+          "source_rows": 116352,
+          "rows": 1000,
+          "sha256": "20efa237c1f83a1e91b23980523e86230fdb020424add8549befae6495b572c9"
+        },
+        {
+          "extract": "de1_0_2009_beneficiary_summary_file_sample_1.csv",
+          "dataset": "beneficiary_summary",
+          "year": 2009,
+          "source_rows": 114538,
+          "rows": 982,
+          "sha256": "388d61f16360f61b7a1a1d869c423ea906cbaf92107b132947828e370bd15147"
+        },
+        {
+          "extract": "de1_0_2010_beneficiary_summary_file_sample_20.csv",
+          "dataset": "beneficiary_summary",
+          "year": 2010,
+          "source_rows": 112754,
+          "rows": 968,
+          "sha256": "94af7a4aafe5ad53743877dacde606f35d85ce563c2c9d126c8b3fb06e2a29ba"
+        },
+        {
+          "extract": "de1_0_2008_to_2010_inpatient_claims_sample_1.csv",
+          "dataset": "inpatient_claims",
+          "year": null,
+          "source_rows": 66773,
+          "rows": 580,
+          "sha256": "50ae68d847a38484a757c2d4d6803688cff99d7e29e682d3f04c247e87873846"
+        },
+        {
+          "extract": "de1_0_2008_to_2010_outpatient_claims_sample_1.csv",
+          "dataset": "outpatient_claims",
+          "year": null,
+          "source_rows": 790790,
+          "rows": 7117,
+          "sha256": "58ce0cd5bc335f8ee5cf136f11da43fec58a9e7b79952eae170aa39c64ba6088"
+        },
+        {
+          "extract": "DE1_0_2008_to_2010_Prescription_Drug_Events_Sample_1.csv",
+          "dataset": "drug_events",
+          "year": null,
+          "source_rows": 5552421,
+          "rows": 45269,
+          "sha256": "bbab27f597079e349a5225351b65028dd541e5cb1246564c1d1e0d0e51a7a9e7"
+        }
+      ]
+    }
+  },
+  "ingestion_files": [
+    {
+      "file_id": 1,
+      "dataset": "beneficiary_summary",
+      "source_year": 2008,
+      "input": "de1_0_2008_beneficiary_summary_file_sample_1.zip",
+      "sha256": "20efa237c1f83a1e91b23980523e86230fdb020424add8549befae6495b572c9",
+      "status": "loaded",
+      "attempts": 1,
+      "row_count": 1000,
+      "accepted_count": 1000,
+      "rejected_count": 0,
+      "loaded_by_run": "manual__20261007T221339Z",
+      "error": null
+    },
+    {
+      "file_id": 2,
+      "dataset": "beneficiary_summary",
+      "source_year": 2009,
+      "input": "de1_0_2009_beneficiary_summary_file_sample_1.zip",
+      "sha256": "388d61f16360f61b7a1a1d869c423ea906cbaf92107b132947828e370bd15147",
+      "status": "loaded",
+      "attempts": 1,
+      "row_count": 982,
+      "accepted_count": 982,
+      "rejected_count": 0,
+      "loaded_by_run": "manual__20261007T221339Z",
+      "error": null
+    },
+    {
+      "file_id": 3,
+      "dataset": "beneficiary_summary",
+      "source_year": 2010,
+      "input": "de1_0_2010_beneficiary_summary_file_sample_20.zip",
+      "sha256": "94af7a4aafe5ad53743877dacde606f35d85ce563c2c9d126c8b3fb06e2a29ba",
+      "status": "loaded",
+      "attempts": 1,
+      "row_count": 968,
+      "accepted_count": 968,
+      "rejected_count": 0,
+      "loaded_by_run": "manual__20261007T221339Z",
+      "error": null
+    },
+    {
+      "file_id": 4,
+      "dataset": "inpatient_claims",
+      "source_year": null,
+      "input": "de1_0_2008_to_2010_inpatient_claims_sample_1.zip",
+      "sha256": "50ae68d847a38484a757c2d4d6803688cff99d7e29e682d3f04c247e87873846",
+      "status": "loaded",
+      "attempts": 1,
+      "row_count": 580,
+      "accepted_count": 580,
+      "rejected_count": 0,
+      "loaded_by_run": "manual__20261007T221339Z",
+      "error": null
+    },
+    {
+      "file_id": 5,
+      "dataset": "outpatient_claims",
+      "source_year": null,
+      "input": "de1_0_2008_to_2010_outpatient_claims_sample_1.zip",
+      "sha256": "58ce0cd5bc335f8ee5cf136f11da43fec58a9e7b79952eae170aa39c64ba6088",
+      "status": "loaded",
+      "attempts": 1,
+      "row_count": 7117,
+      "accepted_count": 7116,
+      "rejected_count": 1,
+      "loaded_by_run": "manual__20261007T221339Z",
+      "error": null
+    },
+    {
+      "file_id": 6,
+      "dataset": "drug_events",
+      "source_year": null,
+      "input": "DE1_0_2008_to_2010_Prescription_Drug_Events_Sample_1.zip",
+      "sha256": "bbab27f597079e349a5225351b65028dd541e5cb1246564c1d1e0d0e51a7a9e7",
+      "status": "loaded",
+      "attempts": 2,
+      "row_count": 45269,
+      "accepted_count": 45269,
+      "rejected_count": 0,
+      "loaded_by_run": "manual__20261007T221429Z",
+      "error": null
+    }
+  ],
+  "quarantine_by_reason": [
+    {
+      "dataset": "outpatient_claims",
+      "reason": "orphan_segment",
+      "rows": 1
+    }
+  ],
+  "step_timings": [
+    {
+      "step": "acquire",
+      "attempt": 1,
+      "status": "succeeded",
+      "duration_seconds": "2.850",
+      "started_at": "2026-10-07T22:15:34.334746+00:00",
+      "finished_at": "2026-10-07T22:15:37.218539+00:00",
+      "detail": {
+        "files": {
+          "de1_0_2008_beneficiary_summary_file_sample_1.zip": "present",
+          "de1_0_2008_to_2010_inpatient_claims_sample_1.zip": "present",
+          "de1_0_2009_beneficiary_summary_file_sample_1.zip": "present",
+          "de1_0_2008_to_2010_outpatient_claims_sample_1.zip": "present",
+          "de1_0_2010_beneficiary_summary_file_sample_20.zip": "present",
+          "DE1_0_2008_to_2010_Prescription_Drug_Events_Sample_1.zip": "present"
+        }
+      }
+    },
+    {
+      "step": "cohort",
+      "attempt": 1,
+      "status": "succeeded",
+      "duration_seconds": "18.265",
+      "started_at": "2026-10-07T22:15:38.398719+00:00",
+      "finished_at": "2026-10-07T22:15:56.685723+00:00",
+      "detail": {
+        "rows": {
+          "de1_0_2008_beneficiary_summary_file_sample_1.csv": 1000,
+          "de1_0_2008_to_2010_inpatient_claims_sample_1.csv": 580,
+          "de1_0_2009_beneficiary_summary_file_sample_1.csv": 982,
+          "de1_0_2008_to_2010_outpatient_claims_sample_1.csv": 7117,
+          "de1_0_2010_beneficiary_summary_file_sample_20.csv": 968,
+          "DE1_0_2008_to_2010_Prescription_Drug_Events_Sample_1.csv": 45269
+        },
+        "cohort_size": 1000,
+        "cohort_sha256": "2084198827772e7d3373b39f1ec446490d56b363b6974da36a2ca9a179ab80bf"
+      }
+    },
+    {
+      "step": "stage",
+      "attempt": 1,
+      "status": "succeeded",
+      "duration_seconds": "0.099",
+      "started_at": "2026-10-07T22:15:58.199892+00:00",
+      "finished_at": "2026-10-07T22:15:58.313506+00:00",
+      "detail": {
+        "files": [
+          {
+            "input": "de1_0_2008_beneficiary_summary_file_sample_1.csv",
+            "status": "skipped",
+            "dataset": "beneficiary_summary",
+            "file_id": null,
+            "reasons": {},
+            "accepted": 0,
+            "rejected": 0,
+            "row_count": 0
+          },
+          {
+            "input": "de1_0_2009_beneficiary_summary_file_sample_1.csv",
+            "status": "skipped",
+            "dataset": "beneficiary_summary",
+            "file_id": null,
+            "reasons": {},
+            "accepted": 0,
+            "rejected": 0,
+            "row_count": 0
+          },
+          {
+            "input": "de1_0_2010_beneficiary_summary_file_sample_20.csv",
+            "status": "skipped",
+            "dataset": "beneficiary_summary",
+            "file_id": null,
+            "reasons": {},
+            "accepted": 0,
+            "rejected": 0,
+            "row_count": 0
+          },
+          {
+            "input": "de1_0_2008_to_2010_inpatient_claims_sample_1.csv",
+            "status": "skipped",
+            "dataset": "inpatient_claims",
+            "file_id": null,
+            "reasons": {},
+            "accepted": 0,
+            "rejected": 0,
+            "row_count": 0
+          },
+          {
+            "input": "de1_0_2008_to_2010_outpatient_claims_sample_1.csv",
+            "status": "skipped",
+            "dataset": "outpatient_claims",
+            "file_id": null,
+            "reasons": {},
+            "accepted": 0,
+            "rejected": 0,
+            "row_count": 0
+          },
+          {
+            "input": "DE1_0_2008_to_2010_Prescription_Drug_Events_Sample_1.csv",
+            "status": "skipped",
+            "dataset": "drug_events",
+            "file_id": null,
+            "reasons": {},
+            "accepted": 0,
+            "rejected": 0,
+            "row_count": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "dbt_run",
+      "attempt": 1,
+      "status": "succeeded",
+      "duration_seconds": "3.052",
+      "started_at": "2026-10-07T22:16:00.564176+00:00",
+      "finished_at": "2026-10-07T22:16:03.634121+00:00",
+      "detail": {}
+    },
+    {
+      "step": "dbt_test",
+      "attempt": 1,
+      "status": "succeeded",
+      "duration_seconds": "2.830",
+      "started_at": "2026-10-07T22:16:05.700156+00:00",
+      "finished_at": "2026-10-07T22:16:08.545373+00:00",
+      "detail": {}
+    },
+    {
+      "step": "reconcile",
+      "attempt": 1,
+      "status": "succeeded",
+      "duration_seconds": "0.214",
+      "started_at": "2026-10-07T22:16:09.849251+00:00",
+      "finished_at": "2026-10-07T22:16:10.070947+00:00",
+      "detail": {
+        "checks": 38
+      }
+    },
+    {
+      "step": "publish",
+      "attempt": 1,
+      "status": "succeeded",
+      "duration_seconds": "0.015",
+      "started_at": "2026-10-07T22:16:11.363759+00:00",
+      "finished_at": "2026-10-07T22:16:11.386577+00:00",
+      "detail": {
+        "tables": [
+          "dim_beneficiary_year",
+          "dim_date",
+          "fact_drug_event",
+          "fact_inpatient_claim",
+          "fact_outpatient_claim",
+          "mart_data_quality",
+          "mart_inpatient_utilization_yearly",
+          "mart_monthly_claim_payments",
+          "mart_monthly_drug_events"
+        ],
+        "reconciliation_checks": 38
+      }
+    }
+  ],
+  "reconciliation": {
+    "checks": 38,
+    "passed": 38,
+    "results": [
+      {
+        "check_name": "money: source clm_pmt_amt = stage + quarantine",
+        "scope": "file 4 de1_0_2008_to_2010_inpatient_claims_sample_1.zip",
+        "expected": "5565690.00",
+        "actual": "5565690.00",
+        "passed": true
+      },
+      {
+        "check_name": "money: source clm_pmt_amt = stage + quarantine",
+        "scope": "file 5 de1_0_2008_to_2010_outpatient_claims_sample_1.zip",
+        "expected": "2017180.00",
+        "actual": "2017180.00",
+        "passed": true
+      },
+      {
+        "check_name": "money: source ptnt_pay_amt = stage + quarantine",
+        "scope": "file 6 DE1_0_2008_to_2010_Prescription_Drug_Events_Sample_1.zip",
+        "expected": "468850.00",
+        "actual": "468850.00",
+        "passed": true
+      },
+      {
+        "check_name": "money: source tot_rx_cst_amt = stage + quarantine",
+        "scope": "file 6 DE1_0_2008_to_2010_Prescription_Drug_Events_Sample_1.zip",
+        "expected": "2809000.00",
+        "actual": "2809000.00",
+        "passed": true
+      },
+      {
+        "check_name": "money: stage = fact_drug_event gross_drug_cost_amt",
+        "scope": "2008",
+        "expected": "1000210.00",
+        "actual": "1000210.00",
+        "passed": true
+      },
+      {
+        "check_name": "money: stage = fact_drug_event gross_drug_cost_amt",
+        "scope": "2009",
+        "expected": "1086160.00",
+        "actual": "1086160.00",
+        "passed": true
+      },
+      {
+        "check_name": "money: stage = fact_drug_event gross_drug_cost_amt",
+        "scope": "2010",
+        "expected": "722630.00",
+        "actual": "722630.00",
+        "passed": true
+      },
+      {
+        "check_name": "money: stage = fact_drug_event patient_pay_amt",
+        "scope": "2008",
+        "expected": "168730.00",
+        "actual": "168730.00",
+        "passed": true
+      },
+      {
+        "check_name": "money: stage = fact_drug_event patient_pay_amt",
+        "scope": "2009",
+        "expected": "181950.00",
+        "actual": "181950.00",
+        "passed": true
+      },
+      {
+        "check_name": "money: stage = fact_drug_event patient_pay_amt",
+        "scope": "2010",
+        "expected": "118170.00",
+        "actual": "118170.00",
+        "passed": true
+      },
+      {
+        "check_name": "money: stage = fact_inpatient_claim medicare payment",
+        "scope": "2008",
+        "expected": "2247300.00",
+        "actual": "2247300.00",
+        "passed": true
+      },
+      {
+        "check_name": "money: stage = fact_inpatient_claim medicare payment",
+        "scope": "2009",
+        "expected": "1906600.00",
+        "actual": "1906600.00",
+        "passed": true
+      },
+      {
+        "check_name": "money: stage = fact_inpatient_claim medicare payment",
+        "scope": "2010",
+        "expected": "1411790.00",
+        "actual": "1411790.00",
+        "passed": true
+      },
+      {
+        "check_name": "money: stage = fact_outpatient_claim medicare payment",
+        "scope": "2008",
+        "expected": "723190.00",
+        "actual": "723190.00",
+        "passed": true
+      },
+      {
+        "check_name": "money: stage = fact_outpatient_claim medicare payment",
+        "scope": "2009",
+        "expected": "808750.00",
+        "actual": "808750.00",
+        "passed": true
+      },
+      {
+        "check_name": "money: stage = fact_outpatient_claim medicare payment",
+        "scope": "2010",
+        "expected": "485040.00",
+        "actual": "485040.00",
+        "passed": true
+      },
+      {
+        "check_name": "rows: distinct staged claims = fact_inpatient_claim",
+        "scope": "all",
+        "expected": "580",
+        "actual": "580",
+        "passed": true
+      },
+      {
+        "check_name": "rows: distinct staged claims = fact_outpatient_claim",
+        "scope": "all",
+        "expected": "7005",
+        "actual": "7005",
+        "passed": true
+      },
+      {
+        "check_name": "rows: raw = stage + quarantine",
+        "scope": "file 1 de1_0_2008_beneficiary_summary_file_sample_1.zip",
+        "expected": "1000",
+        "actual": "1000",
+        "passed": true
+      },
+      {
+        "check_name": "rows: raw = stage + quarantine",
+        "scope": "file 2 de1_0_2009_beneficiary_summary_file_sample_1.zip",
+        "expected": "982",
+        "actual": "982",
+        "passed": true
+      },
+      {
+        "check_name": "rows: raw = stage + quarantine",
+        "scope": "file 3 de1_0_2010_beneficiary_summary_file_sample_20.zip",
+        "expected": "968",
+        "actual": "968",
+        "passed": true
+      },
+      {
+        "check_name": "rows: raw = stage + quarantine",
+        "scope": "file 4 de1_0_2008_to_2010_inpatient_claims_sample_1.zip",
+        "expected": "580",
+        "actual": "580",
+        "passed": true
+      },
+      {
+        "check_name": "rows: raw = stage + quarantine",
+        "scope": "file 5 de1_0_2008_to_2010_outpatient_claims_sample_1.zip",
+        "expected": "7117",
+        "actual": "7117",
+        "passed": true
+      },
+      {
+        "check_name": "rows: raw = stage + quarantine",
+        "scope": "file 6 DE1_0_2008_to_2010_Prescription_Drug_Events_Sample_1.zip",
+        "expected": "45269",
+        "actual": "45269",
+        "passed": true
+      },
+      {
+        "check_name": "rows: raw rows = registry total",
+        "scope": "file 1 de1_0_2008_beneficiary_summary_file_sample_1.zip",
+        "expected": "1000",
+        "actual": "1000",
+        "passed": true
+      },
+      {
+        "check_name": "rows: raw rows = registry total",
+        "scope": "file 2 de1_0_2009_beneficiary_summary_file_sample_1.zip",
+        "expected": "982",
+        "actual": "982",
+        "passed": true
+      },
+      {
+        "check_name": "rows: raw rows = registry total",
+        "scope": "file 3 de1_0_2010_beneficiary_summary_file_sample_20.zip",
+        "expected": "968",
+        "actual": "968",
+        "passed": true
+      },
+      {
+        "check_name": "rows: raw rows = registry total",
+        "scope": "file 4 de1_0_2008_to_2010_inpatient_claims_sample_1.zip",
+        "expected": "580",
+        "actual": "580",
+        "passed": true
+      },
+      {
+        "check_name": "rows: raw rows = registry total",
+        "scope": "file 5 de1_0_2008_to_2010_outpatient_claims_sample_1.zip",
+        "expected": "7117",
+        "actual": "7117",
+        "passed": true
+      },
+      {
+        "check_name": "rows: raw rows = registry total",
+        "scope": "file 6 DE1_0_2008_to_2010_Prescription_Drug_Events_Sample_1.zip",
+        "expected": "45269",
+        "actual": "45269",
+        "passed": true
+      },
+      {
+        "check_name": "rows: registry total = accepted + rejected",
+        "scope": "file 1 de1_0_2008_beneficiary_summary_file_sample_1.zip",
+        "expected": "1000",
+        "actual": "1000",
+        "passed": true
+      },
+      {
+        "check_name": "rows: registry total = accepted + rejected",
+        "scope": "file 2 de1_0_2009_beneficiary_summary_file_sample_1.zip",
+        "expected": "982",
+        "actual": "982",
+        "passed": true
+      },
+      {
+        "check_name": "rows: registry total = accepted + rejected",
+        "scope": "file 3 de1_0_2010_beneficiary_summary_file_sample_20.zip",
+        "expected": "968",
+        "actual": "968",
+        "passed": true
+      },
+      {
+        "check_name": "rows: registry total = accepted + rejected",
+        "scope": "file 4 de1_0_2008_to_2010_inpatient_claims_sample_1.zip",
+        "expected": "580",
+        "actual": "580",
+        "passed": true
+      },
+      {
+        "check_name": "rows: registry total = accepted + rejected",
+        "scope": "file 5 de1_0_2008_to_2010_outpatient_claims_sample_1.zip",
+        "expected": "7117",
+        "actual": "7117",
+        "passed": true
+      },
+      {
+        "check_name": "rows: registry total = accepted + rejected",
+        "scope": "file 6 DE1_0_2008_to_2010_Prescription_Drug_Events_Sample_1.zip",
+        "expected": "45269",
+        "actual": "45269",
+        "passed": true
+      },
+      {
+        "check_name": "rows: stage.beneficiary_year = dim_beneficiary_year",
+        "scope": "all",
+        "expected": "2950",
+        "actual": "2950",
+        "passed": true
+      },
+      {
+        "check_name": "rows: stage.drug_event = fact_drug_event",
+        "scope": "all",
+        "expected": "45269",
+        "actual": "45269",
+        "passed": true
+      }
+    ]
+  },
+  "publication": {
+    "run_id": "manual__20261007T221529Z",
+    "published_at": "2026-10-07T22:16:11.372182+00:00",
+    "published_schema": "marts",
+    "previous_schema": "marts_previous",
+    "detail": {
+      "tables": [
+        "dim_beneficiary_year",
+        "dim_date",
+        "fact_drug_event",
+        "fact_inpatient_claim",
+        "fact_outpatient_claim",
+        "mart_data_quality",
+        "mart_inpatient_utilization_yearly",
+        "mart_monthly_claim_payments",
+        "mart_monthly_drug_events"
+      ],
+      "reconciliation_checks": 38
+    }
+  },
+  "published_marts": {
+    "fact_inpatient_claim": {
+      "rows": 580,
+      "amount_sum": "5565690.00"
+    },
+    "fact_outpatient_claim": {
+      "rows": 7005,
+      "amount_sum": "2016980.00"
+    },
+    "fact_drug_event": {
+      "rows": 45269,
+      "amount_sum": "2809000.00"
+    },
+    "dim_beneficiary_year": {
+      "rows": 2950,
+      "amount_sum": null
+    }
+  },
+  "previous_marts": {
+    "fact_inpatient_claim": {
+      "rows": 580,
+      "amount_sum": "5565690.00"
+    },
+    "fact_outpatient_claim": {
+      "rows": 7005,
+      "amount_sum": "2016980.00"
+    },
+    "fact_drug_event": {
+      "rows": 45269,
+      "amount_sum": "2809000.00"
+    },
+    "dim_beneficiary_year": {
+      "rows": 2950,
+      "amount_sum": null
+    }
+  },
+  "published_equals_previous": true,
+  "marts": {
+    "utilization_by_year": [
+      {
+        "year": 2008,
+        "beneficiary_years": 1000,
+        "admissions": 249,
+        "admissions_per_1000_beneficiary_years": "249.00",
+        "observed_inpatient_days": 1339,
+        "utilization_days": 1331,
+        "mean_length_of_stay_days": "5.38"
+      },
+      {
+        "year": 2009,
+        "beneficiary_years": 982,
+        "admissions": 210,
+        "admissions_per_1000_beneficiary_years": "213.85",
+        "observed_inpatient_days": 1105,
+        "utilization_days": 1056,
+        "mean_length_of_stay_days": "5.26"
+      },
+      {
+        "year": 2010,
+        "beneficiary_years": 968,
+        "admissions": 121,
+        "admissions_per_1000_beneficiary_years": "125.00",
+        "observed_inpatient_days": 716,
+        "utilization_days": 756,
+        "mean_length_of_stay_days": "5.92"
+      }
+    ],
+    "claim_payments_by_year": [
+      {
+        "year": 2008,
+        "claim_type": "inpatient",
+        "claims": 249,
+        "medicare_claim_payment_amt": "2247300.00",
+        "negative_payment_claims": 0
+      },
+      {
+        "year": 2008,
+        "claim_type": "outpatient",
+        "claims": 2607,
+        "medicare_claim_payment_amt": "723190.00",
+        "negative_payment_claims": 8
+      },
+      {
+        "year": 2009,
+        "claim_type": "inpatient",
+        "claims": 210,
+        "medicare_claim_payment_amt": "1906600.00",
+        "negative_payment_claims": 1
+      },
+      {
+        "year": 2009,
+        "claim_type": "outpatient",
+        "claims": 2826,
+        "medicare_claim_payment_amt": "808750.00",
+        "negative_payment_claims": 12
+      },
+      {
+        "year": 2010,
+        "claim_type": "inpatient",
+        "claims": 121,
+        "medicare_claim_payment_amt": "1411790.00",
+        "negative_payment_claims": 0
+      },
+      {
+        "year": 2010,
+        "claim_type": "outpatient",
+        "claims": 1572,
+        "medicare_claim_payment_amt": "485040.00",
+        "negative_payment_claims": 2
+      }
+    ],
+    "drug_events_by_year": [
+      {
+        "year": 2008,
+        "events": 16407,
+        "gross_drug_cost_amt": "1000210.00",
+        "patient_pay_amt": "168730.00"
+      },
+      {
+        "year": 2009,
+        "events": 17440,
+        "gross_drug_cost_amt": "1086160.00",
+        "patient_pay_amt": "181950.00"
+      },
+      {
+        "year": 2010,
+        "events": 11422,
+        "gross_drug_cost_amt": "722630.00",
+        "patient_pay_amt": "118170.00"
+      }
+    ],
+    "beneficiary_years": [
+      {
+        "year": 2008,
+        "beneficiary_years": 1000
+      },
+      {
+        "year": 2009,
+        "beneficiary_years": 982
+      },
+      {
+        "year": 2010,
+        "beneficiary_years": 968
+      }
+    ]
+  },
+  "failed_checks": [],
+  "failed_steps": [],
+  "limitations": [
+    "DE-SynPUF is fully synthetic; CMS states analyses of it 'will be misleading and often incorrect' for inferences about Medicare beneficiaries, providers or the program. Results here demonstrate the pipeline, not Medicare utilization or spending.",
+    "The cohort is the first N beneficiary IDs in sort order, not a random sample.",
+    "Medicare claim payment (CLM_PMT_AMT) covers inpatient and outpatient institutional claims only; carrier (physician) claims are not loaded, so payments are not total cost of care.",
+    "Admissions per 1,000 beneficiary-years uses beneficiary summary records as the denominator, without adjusting for partial-year enrollment, HMO months or death.",
+    "Single-node local deployment with Docker Compose; no high availability is claimed."
+  ]
+}

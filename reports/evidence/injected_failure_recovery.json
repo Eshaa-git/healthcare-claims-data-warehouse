@@ -1,0 +1,15 @@
+{
+  "failed_file": "drug_events",
+  "error": "InjectedFailure: injected failure after chunk 2",
+  "rows_after_failure": {
+    "raw": 0,
+    "stage": 0,
+    "quarantine": 0
+  },
+  "rows_after_rerun": {
+    "raw": 75,
+    "stage": 75,
+    "quarantine": 0
+  },
+  "attempts": 2
+}

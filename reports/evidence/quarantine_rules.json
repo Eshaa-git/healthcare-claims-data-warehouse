@@ -1,0 +1,22 @@
+{
+  "outpatient_claims__batch_bad.csv": {
+    "rows": 8,
+    "accepted": 1,
+    "quarantined": {
+      "1": "invalid_date:CLM_FROM_DT",
+      "5": "missing_required:CLM_PMT_AMT",
+      "7": "thru_before_from",
+      "8": "invalid_amount:CLM_PMT_AMT",
+      "4": "duplicate_key_in_file:conflict",
+      "2": "duplicate_key_existing:exact",
+      "6": "no_beneficiary_year"
+    }
+  },
+  "inpatient_claims__batch_bad.csv": {
+    "rows": 1,
+    "accepted": 0,
+    "quarantined": {
+      "1": "negative_length_of_stay"
+    }
+  }
+}
