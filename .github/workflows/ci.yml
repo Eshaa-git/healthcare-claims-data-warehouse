@@ -69,7 +69,8 @@ jobs:
       - name: Verify requirements.lock.txt matches uv.lock
         run: |
           uv export --frozen --no-dev --no-emit-project --format requirements-txt -q -o /tmp/req.txt
-          diff -u requirements.lock.txt /tmp/req.txt
+          # compare packages and hashes only; the header comment records the output path
+          diff -u <(grep -v '^#' requirements.lock.txt) <(grep -v '^#' /tmp/req.txt)
       - uses: docker/setup-buildx-action@v4
       - uses: docker/build-push-action@v7
         with:
